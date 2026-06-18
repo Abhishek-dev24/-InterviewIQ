@@ -9,9 +9,6 @@ load_dotenv()
 SECRET_KEY = getenv("SECRET_KEY")
 ALGORITHM = getenv("ALGORITHM")
 
-print("SECRET_KEY =", SECRET_KEY)
-print("ALGORITHM =", ALGORITHM)
-
 
 def hash_password(password: str):
 

@@ -84,10 +84,10 @@ def update_session_status(
    
    
 # This function is used to end an interview session by updating its status to "completed" and setting the ended_at timestamp. It also includes error handling to ensure that the session exists and is not already completed before attempting to update it. This can be useful for finalizing the interview process and preventing any further interactions with a completed session.
-def end_interview_session(session_id: str):
+def end_interview_session(session_id: str, user_email: str = None):
 
-    session = db.interview_sessions.find_one(
-        {"session_id": session_id}
+    session = interview_collection.find_one(
+        {"_id": ObjectId(session_id)}
     )
 
     if not session:
@@ -96,14 +96,20 @@ def end_interview_session(session_id: str):
             detail="Interview session not found"
         )
 
+    if user_email and session.get("user_email") != user_email:
+        raise HTTPException(
+            status_code=403,
+            detail="Not authorized to end this interview"
+        )
+
     if session.get("status") == "completed":
         raise HTTPException(
             status_code=400,
             detail="Interview already completed"
         )
 
-    db.interview_sessions.update_one(
-        {"session_id": session_id},
+    interview_collection.update_one(
+        {"_id": ObjectId(session_id)},
         {
             "$set": {
                 "status": "completed",

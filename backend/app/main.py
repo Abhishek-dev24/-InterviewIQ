@@ -5,6 +5,7 @@ from app.routers.interview_router import router as interview_router
 
 from app.routers.answer_router import router as answer_router
 from app.routers.summary_router import router as summary_router
+from app.routers.report_router import router as report_router
 
 app = FastAPI(
     title="InterviewIQ API",
@@ -41,6 +42,13 @@ app.include_router(
 
 app.include_router(
     answer_router,
+    prefix="/api"
+)
+
+app.include_router(summary_router)
+
+app.include_router(
+    report_router,
     prefix="/api"
 )
 

@@ -108,7 +108,7 @@ def generate_interview_report(session_id: str):
 
     difficulty_progression = (
         extract_difficulty_progression(
-            question_documents
+            answer_documents
         )
     )
 
@@ -139,7 +139,7 @@ def generate_interview_report(session_id: str):
 
             "answer": answer_documents[
                 index
-            ].get("answer", ""),
+            ].get("user_answer", ""),
 
             "score": answer_documents[
                 index

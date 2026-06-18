@@ -1,5 +1,3 @@
-// src/hooks/useInterview.js
-
 import { useState } from "react";
 import {
   startInterview,
@@ -10,6 +8,7 @@ import {
 
 export const useInterview = () => {
   const [sessionId, setSessionId] = useState(null);
+  const [questionId, setQuestionId] = useState(null);
   const [question, setQuestion] = useState("");
   const [questionNumber, setQuestionNumber] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -23,12 +22,14 @@ export const useInterview = () => {
       setError(null);
 
       const data = await startInterview(payload);
+      const interviewData = data.data;
 
-      setSessionId(data.session_id);
-      setQuestion(data.question);
+      setSessionId(interviewData.session_id);
+      setQuestionId(interviewData.question_id);
+      setQuestion(interviewData.question);
       setQuestionNumber(1);
 
-      return data;
+      return interviewData;
     } catch (err) {
       setError(err.response?.data?.detail || "Start failed");
     } finally {
@@ -41,15 +42,18 @@ export const useInterview = () => {
       setLoading(true);
       setError(null);
 
-      const data = await submitAnswer(sessionId, answer);
+      const data = await submitAnswer(sessionId, questionId, answer);
 
-      if (data.interview_ended) {
+      if (data.next_question?.completed) {
+        const summaryData = await getInterviewSummary(sessionId);
+        setSummary(summaryData);
         setFinished(true);
         return data;
       }
 
-      setQuestion(data.next_question);
-      setQuestionNumber((prev) => prev + 1);
+      setQuestion(data.next_question.next_question);
+      setQuestionId(data.next_question.question_id);
+      setQuestionNumber(data.next_question.question_number);
 
       return data;
     } catch (err) {
@@ -80,6 +84,7 @@ export const useInterview = () => {
 
   return {
     sessionId,
+    questionId,
     question,
     questionNumber,
     loading,

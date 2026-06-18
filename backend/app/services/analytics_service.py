@@ -24,13 +24,13 @@ def calculate_overall_score(answer_documents: list):
     return round(overall_score, 2)
 
 
-def extract_difficulty_progression(question_documents: list):
+def extract_difficulty_progression(answer_documents: list):
 
     difficulties = []
 
-    for question in question_documents:
+    for answer in answer_documents:
         difficulties.append(
-            question.get("difficulty", "unknown")
+            answer.get("difficulty_assigned", "unknown")
         )
 
     return difficulties

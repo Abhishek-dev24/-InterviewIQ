@@ -35,10 +35,14 @@ async def start_interview(
     "/end-interview/{session_id}",
     response_model=EndInterviewResponse
 )
-async def end_interview(session_id: str):
+async def end_interview(
+    session_id: str,
+    current_user=Depends(get_current_user)
+):
 
     result = end_interview_session(
-        session_id
+        session_id,
+        current_user["email"]
     )
 
     return result

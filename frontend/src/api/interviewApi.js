@@ -1,21 +1,21 @@
-// src/api/interviewApi.js
-
 import api from "./axiosInstance";
 
 export const startInterview = async (payload) => {
   const response = await api.post(
-    "/start-interview",
+    "/interview/start-interview",
     payload
   );
 
   return response.data;
 };
 
-export const submitAnswer = async (sessionId, answer) => {
+export const submitAnswer = async (sessionId, questionId, answer) => {
   const response = await api.post(
-    `/submit-answer/${sessionId}`,
+    "/answer/submit-answer",
     {
-      answer
+      session_id: sessionId,
+      question_id: questionId,
+      answer,
     }
   );
 
@@ -32,7 +32,7 @@ export const getInterviewSummary = async (sessionId) => {
 
 export const endInterview = async (sessionId) => {
   const response = await api.post(
-    `/end-interview/${sessionId}`
+    `/interview/end-interview/${sessionId}`
   );
 
   return response.data;

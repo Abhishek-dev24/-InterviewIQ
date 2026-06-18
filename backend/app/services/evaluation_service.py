@@ -1,5 +1,8 @@
 import google.generativeai as genai
 import json
+from app.core.config import settings
+
+genai.configure(api_key=settings.gemini_api_key)
 
 
 def evaluate_answer(

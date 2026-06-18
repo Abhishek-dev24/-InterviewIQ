@@ -24,10 +24,8 @@ async def generate_report(
 
     try:
 
-        report = (
-            await generate_interview_report(
-                session_id
-            )
+        report = generate_interview_report(
+            session_id
         )
 
         return {

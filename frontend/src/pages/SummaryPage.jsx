@@ -1,5 +1,3 @@
-// src/pages/SummaryPage.jsx
-
 import { useLocation, useNavigate } from "react-router-dom";
 
 const SummaryPage = () => {
@@ -23,7 +21,7 @@ const SummaryPage = () => {
         Interview Summary
       </h1>
 
-      <div className="bg-white shadow rounded-xl p-6 space-y-4">
+      <div className="bg-white shadow rounded-xl p-6 space-y-4 text-gray-800">
 
         <p>
           <strong>Total Questions:</strong>{" "}
@@ -36,9 +34,20 @@ const SummaryPage = () => {
         </p>
 
         <p>
-          <strong>Overall Feedback:</strong>{" "}
-          {summary.feedback}
+          <strong>Performance Level:</strong>{" "}
+          {summary.performance_level}
         </p>
+
+        {summary.feedbacks?.length > 0 && (
+          <div>
+            <strong>Feedback:</strong>
+            <ul className="list-disc pl-6 mt-2 space-y-1">
+              {summary.feedbacks.map((feedback, index) => (
+                <li key={index}>{feedback}</li>
+              ))}
+            </ul>
+          </div>
+        )}
 
       </div>
 
