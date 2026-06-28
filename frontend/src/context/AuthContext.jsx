@@ -16,9 +16,7 @@ export const AuthProvider = ({ children }) => {
 
 
     const login = async (credentials) => {
-        console.log("LOGIN FUNCTION RUNNING");
         const response = await loginUser(credentials);
-        console.log(response);
         const jwtToken = response.access_token;
         localStorage.setItem("token", jwtToken);
         setToken(jwtToken);

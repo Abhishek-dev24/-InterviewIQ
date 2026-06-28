@@ -11,25 +11,21 @@ const LoginPage = () => {
   const handleLogin = async (data) => {
     setError("");
     try {
-      await login(data);           // ✅ data = {email, password} object
-      navigate("/dashboard");      // ✅ only navigates on success
+      await login(data);
+      navigate("/dashboard");
     } catch (err) {
-      // ✅ show exact backend error to user
       const msg = err.response?.data?.detail || "Login failed";
       setError(msg);
-      console.error("Login error:", err.response?.data);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-black px-4">
-      <AuthForm
-        type="login"
-        onSubmit={handleLogin}
-        buttonText="Login"
-        error={error}          // ✅ pass error down to form
-      />
-    </div>
+    <AuthForm
+      type="login"
+      onSubmit={handleLogin}
+      buttonText="Login"
+      error={error}
+    />
   );
 };
 

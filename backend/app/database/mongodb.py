@@ -1,12 +1,32 @@
 from pymongo import MongoClient
-from os import getenv
-from dotenv import load_dotenv
+from pymongo.errors import PyMongoError
 
-load_dotenv()
+from app.core.config import settings
 
-MONGO_URI = getenv("MONGO_URI")
-DATABASE_NAME = getenv("DATABASE_NAME")
+client = MongoClient(
+    settings.mongodb_url,
+    serverSelectionTimeoutMS=5000,
+)
 
-client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=5000)
+db = client[settings.database_name]
 
-db = client[DATABASE_NAME]
+
+def ping_database():
+    client.admin.command("ping")
+    return True
+
+
+def get_database_status():
+    try:
+        ping_database()
+        return {
+            "connected": True,
+            "database": settings.database_name,
+            "url": settings.mongodb_url.split("@")[-1],
+        }
+    except PyMongoError as exc:
+        return {
+            "connected": False,
+            "database": settings.database_name,
+            "error": str(exc),
+        }
